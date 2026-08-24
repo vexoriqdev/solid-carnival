@@ -2,6 +2,7 @@
 local CorrectKey = "mmjx901"
 local KeyLink = "https://linkvertise.com/access/1258318/QZy93Rm5oHBF"
 local LogoID = "rbxassetid://10734975692"
+local Speed = 500 -- سپید: 1 هەتا 1000 (1 = بچووک، 1000 = زۆر خێرا)
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "VexoriqHub_PremiumUI"
@@ -206,6 +207,51 @@ TopLine.Position = UDim2.new(0, 0, 0, 42)
 TopLine.BackgroundColor3 = Color3.fromRGB(30, 32, 42)
 TopLine.BorderSizePixel = 0
 
+-- Speed Control Label
+local SpeedLabel = Instance.new("TextLabel")
+SpeedLabel.Parent = MainFrame
+SpeedLabel.Size = UDim2.new(0, 250, 0, 30)
+SpeedLabel.Position = UDim2.new(0.2, 0, 0.3, 0)
+SpeedLabel.BackgroundTransparency = 1
+SpeedLabel.Text = "سپید: " .. Speed .. " / 1000"
+SpeedLabel.TextColor3 = Color3.fromRGB(0, 170, 255)
+SpeedLabel.Font = Enum.Font.GothamBold
+SpeedLabel.TextSize = 14
+
+-- Speed Slider
+local SpeedSlider = Instance.new("Frame")
+SpeedSlider.Parent = MainFrame
+SpeedSlider.Size = UDim2.new(0, 200, 0, 8)
+SpeedSlider.Position = UDim2.new(0.2, 0, 0.42, 0)
+SpeedSlider.BackgroundColor3 = Color3.fromRGB(30, 32, 42)
+SpeedSlider.BorderSizePixel = 0
+
+local SliderCorner = Instance.new("UICorner")
+SliderCorner.CornerRadius = UDim.new(0, 4)
+SliderCorner.Parent = SpeedSlider
+
+local SliderButton = Instance.new("Frame")
+SliderButton.Parent = SpeedSlider
+SliderButton.Size = UDim2.new(0, 16, 0, 16)
+SliderButton.Position = UDim2.new((Speed - 1) / 999, 0, 0.5, -8)
+SliderButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+SliderButton.BorderSizePixel = 0
+
+local ButtonCorner = Instance.new("UICorner")
+ButtonCorner.CornerRadius = UDim.new(1, 0)
+ButtonCorner.Parent = SliderButton
+
+-- Slider Fill
+local SliderFill = Instance.new("Frame")
+SliderFill.Parent = SpeedSlider
+SliderFill.Size = UDim2.new((Speed - 1) / 999, 0, 1, 0)
+SliderFill.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+SliderFill.BorderSizePixel = 0
+
+local FillCorner = Instance.new("UICorner")
+FillCorner.CornerRadius = UDim.new(0, 4)
+FillCorner.Parent = SliderFill
+
 -- Functions
 GetKeyBtn.MouseButton1Click:Connect(function()
     setclipboard(KeyLink)
@@ -217,7 +263,7 @@ SubmitBtn.MouseButton1Click:Connect(function()
     if KeyInput.Text == CorrectKey then
         StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 120)
         StatusLabel.Text = "Access Granted!"
-        task.wait(0.6)
+        task.wait(0.6 / (Speed / 500)) -- سپید بە بەرەو بڕیار
         KeyWindow:Destroy()
         MainFrame.Visible = true
         ToggleBtn.Visible = true
@@ -233,4 +279,31 @@ end)
 
 CloseBtn.MouseButton1Click:Connect(function()
     MainFrame.Visible = false
+end)
+
+-- Slider Movement
+local dragging = false
+
+SliderButton.MouseButton1Down:Connect(function()
+    dragging = true
+end)
+
+game:GetService("UserInputService").InputEnded:Connect(function()
+    dragging = false
+end)
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    if dragging then
+        local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+        local sliderPosition = SpeedSlider.AbsolutePosition.X
+        local sliderSize = SpeedSlider.AbsoluteSize.X
+        local mouseX = mouse.X
+        
+        local newPosition = math.clamp((mouseX - sliderPosition) / sliderSize, 0, 1)
+        Speed = math.floor(newPosition * 999 + 1)
+        
+        SliderButton.Position = UDim2.new(newPosition, 0, 0.5, -8)
+        SliderFill.Size = UDim2.new(newPosition, 0, 1, 0)
+        SpeedLabel.Text = "سپید: " .. Speed .. " / 1000"
+    end
 end)
