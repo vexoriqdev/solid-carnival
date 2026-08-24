@@ -1,6 +1,6 @@
 -- Vexoriq Hub - Ultimate Premium UI (Solix Style)
 local CorrectKey = "mmjx901"
-local KeyLink = "https://pastebin.com/raw/z1tfb6pe"
+local KeyLink = "https://linkvertise.com/access/1258318/QZy93Rm5oHBF"
 local LogoID = "rbxassetid://10734975692"
 
 local ScreenGui = Instance.new("ScreenGui")
