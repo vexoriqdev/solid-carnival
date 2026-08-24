@@ -27,15 +27,15 @@ if identifyexecutor and identifyexecutor() == "Wave" then
 end
 
 local Folder_Configs = {
-	Directory = "solixhub",
-	Assets = "solixhub/Assets",
-	Configs = "solixhub/Configs",
-	Datas = "solixhub/Datas",
-	Images = "solixhub/Images",
-	Themes = "solixhub/Themes"
+	Directory = "vexoriqhub",
+	Assets = "vexoriqhub/Assets",
+	Configs = "vexoriqhub/Configs",
+	Datas = "vexoriqhub/Datas",
+	Images = "vexoriqhub/Images",
+	Themes = "vexoriqhub/Themes"
 }
 
-for _, Folder in Folder_Configs do
+for _, Folder in pairs(Folder_Configs) do
 	if not isfolder(Folder) then
 		makefolder(Folder)
 	end
@@ -68,11 +68,11 @@ local GameList = {
 }
 
 local Config = {
-	File = "solixhub/savedkey.txt",
+	File = "vexoriqhub/savedkey.txt",
 	Working = "https://rekonise.com/linkvertise-2bbnc",
 	Rinku = "https://rekonise.com/rinku-z0di3",
-	Discord = "https://discord.gg/solixhub",
-	Shop = "https://solixhub.com/free",
+	Discord = "https://discord.gg/vexoriqhub",
+	Shop = "https://vexoriqhub.com/free",
 }
 
 local ErrorMessages = {
@@ -93,7 +93,7 @@ local GameConfig = GameList[GameId]
 
 if not GameConfig then
 	StarterGui:SetCore("SendNotification", {
-		Title = "Solid Carnival - Vexoriq Hub",
+		Title = "Vexoriq Hub - InstantWins",
 		Text = "This game is not supported yet.",
 		Icon = "rbxassetid://137698471325689",
 	})
@@ -110,6 +110,15 @@ local function DeleteFile(Input)
 		delfile(Input)
 	end
 end
+
+-- InstantWins Features for Speed Keyboard Escape
+local InstantWinsFeatures = {
+	enabled = true,
+	autoWin = true,
+	speedMultiplier = 2.0,
+	autoClick = true,
+	keyboardBypass = true,
+}
 
 local LuarmorApi = loadstring(game:HttpGet("https://sdkapi-public.luarmor.net/library.lua"))()
 LuarmorApi.script_id = ScriptId
@@ -147,9 +156,9 @@ do
 		Shadow = FromRGB(8, 6, 12),
 		Text = FromRGB(242, 240, 248),
 		Inactive = FromRGB(148, 144, 162),
-		Accent = FromRGB(215, 40, 114), -- سۆری گۆرین (Magenta/Pink)
+		Accent = FromRGB(0, 170, 255), -- بلوو
 		Element = FromRGB(32, 30, 40),
-		Gradient = FromRGB(255, 140, 185),
+		Gradient = FromRGB(100, 200, 255),
 	}
 
 	local FontFace do
@@ -277,7 +286,7 @@ do
 		wait()
 		NotifLayoutOrder += 1
 
-		local title = data.Title or "Solid Carnival"
+		local title = data.Title or "Vexoriq Hub"
 		local desc = data.Description or ""
 		local duration = data.Duration or 5
 		local accent = data.Color or Theme.Accent
@@ -472,7 +481,7 @@ do
 	local content_w = panel_w - pad * 2
 	local half_w = MathFloor((content_w - btn_gap) / 2)
 
-	local LogoUrl = "https://solixhub.com/solix-logo.png"
+	local LogoUrl = "https://vexoriqhub.com/logo.png"
 	local LogoFallback = "rbxassetid://137698471325689"
 
 	local function GetLogoAsset()
@@ -483,7 +492,7 @@ do
 		if type(isfolder) == "function" and not isfolder(images_dir) and type(makefolder) == "function" then
 			pcall(makefolder, images_dir)
 		end
-		local file_path = images_dir .. "/solix-logo.png"
+		local file_path = images_dir .. "/logo.png"
 		if type(isfile) ~= "function" or not isfile(file_path) then
 			local ok, content = pcall(function()
 				return game:HttpGet(LogoUrl)
@@ -634,16 +643,16 @@ do
 		return lbl
 	end
 
-	BrandPart("solid", Theme.Text, 1)
-	BrandPart("carnival", Theme.Accent, 2)
-	BrandPart(".hub", Theme.Text, 3)
+	BrandPart("vexoriq", Theme.Text, 1)
+	BrandPart("instant", Theme.Accent, 2)
+	BrandPart("wins", Theme.Text, 3)
 
 	local Description = Create("TextLabel", {
 		Parent = Main,
 		Size = UDim2New(1, -(pad * 2), 0, 16),
 		Position = UDim2New(0, pad, 0, pad + logo_s + 6),
 		BackgroundTransparency = 1,
-		Text = "کلیدی تایبەت خۆت بنیشتێنە",
+		Text = "فوری بردن - Speed Keyboard Escape",
 		TextColor3 = Theme.Inactive,
 		TextSize = IsMobile and 13 or 12,
 		FontFace = FontFace,
@@ -666,7 +675,7 @@ do
 
 	local field_y = pad + logo_s + 40
 
-	local KeyBox = Create("Frame", {
+	local StatusBox = Create("Frame", {
 		Parent = Main,
 		Size = UDim2New(0, content_w, 0, field_h),
 		Position = UDim2New(0, pad, 0, field_y),
@@ -675,39 +684,36 @@ do
 		BorderSizePixel = 0,
 		ZIndex = 3,
 	})
-	Corner(KeyBox, 5)
-	local KeyStroke = Stroke(KeyBox, Theme.Border, 1)
-	track(KeyBox, "bg")
-	track(KeyStroke, "stroke")
+	Corner(StatusBox, 5)
+	local StatusStroke = Stroke(StatusBox, Theme.Border, 1)
+	track(StatusBox, "bg")
+	track(StatusStroke, "stroke")
 
-	local KeyInput = Create("TextBox", {
-		Parent = KeyBox,
+	local StatusLabel = Create("TextLabel", {
+		Parent = StatusBox,
 		Size = UDim2New(1, -20, 1, 0),
 		Position = UDim2New(0, 10, 0, 0),
 		BackgroundTransparency = 1,
-		Text = "",
-		TextColor3 = Theme.Text,
+		Text = "فوری بردن فعال ✓",
+		TextColor3 = FromRGB(0, 255, 100),
 		TextSize = IsMobile and 15 or 13,
 		FontFace = FontFace,
-		PlaceholderColor3 = Theme.Inactive,
-		PlaceholderText = "کلید بنیشتێنە...",
-		TextTransparency = 1,
 		TextYAlignment = Enum.TextYAlignment.Center,
 		TextXAlignment = Enum.TextXAlignment.Left,
-		ClearTextOnFocus = false,
+		TextTransparency = 1,
 		ZIndex = 4,
 	})
-	track(KeyInput, "text")
+	track(StatusLabel, "text")
 
 	local btn_y = field_y + field_h + 12
 
-	local ShopBtn = Create("TextButton", {
+	local ToggleBtn = Create("TextButton", {
 		Parent = Main,
 		Size = UDim2New(0, half_w, 0, btn_h),
 		Position = UDim2New(0, pad, 0, btn_y),
 		BackgroundColor3 = Theme.Element,
 		BackgroundTransparency = 1,
-		Text = "کلید بکڕە",
+		Text = "گاڕتدابێنە",
 		TextColor3 = Theme.Text,
 		TextSize = IsMobile and 15 or 13,
 		FontFace = FontFace,
@@ -715,18 +721,18 @@ do
 		AutoButtonColor = false,
 		ZIndex = 4,
 	})
-	Corner(ShopBtn, 5)
-	local ShopStroke = Stroke(ShopBtn, Theme.Border, 1)
-	track(ShopBtn, "bg")
-	track(ShopStroke, "stroke")
+	Corner(ToggleBtn, 5)
+	local ToggleStroke = Stroke(ToggleBtn, Theme.Border, 1)
+	track(ToggleBtn, "bg")
+	track(ToggleStroke, "stroke")
 
-	local SubmitBtn = Create("TextButton", {
+	local ActivateBtn = Create("TextButton", {
 		Parent = Main,
 		Size = UDim2New(0, half_w, 0, btn_h),
 		Position = UDim2New(1, -(pad + half_w), 0, btn_y),
 		BackgroundColor3 = Theme.Accent,
 		BackgroundTransparency = 1,
-		Text = "دەچ",
+		Text = "دەستپێکردن",
 		TextColor3 = FromRGB(255, 255, 255),
 		TextSize = IsMobile and 15 or 13,
 		FontFace = FontFace,
@@ -734,10 +740,10 @@ do
 		AutoButtonColor = false,
 		ZIndex = 4,
 	})
-	Corner(SubmitBtn, 5)
-	local SubmitStroke = Stroke(SubmitBtn, Theme.Accent, 1)
-	track(SubmitBtn, "bg")
-	track(SubmitStroke, "stroke")
+	Corner(ActivateBtn, 5)
+	local ActivateStroke = Stroke(ActivateBtn, Theme.Accent, 1)
+	track(ActivateBtn, "bg")
+	track(ActivateStroke, "stroke")
 
 	-- دوگمەی مێنو / Drag
 	local function setupDragging(target, handle)
@@ -771,46 +777,37 @@ do
 	-- ڕەفتار / Behavior
 	CloseBtn.MouseButton1Click:Connect(function()
 		Tween(Main, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Size = UDim2New(0, 0, 0, 0), BackgroundTransparency = 1 })
-		for _, item in fade_items do
+		for _, item in pairs(fade_items) do
 			Tween(item.Inst, TweenInfo.new(0.3), { TextTransparency = 1, ImageTransparency = 1, BackgroundTransparency = 1 })
 		end
 		task.wait(0.4)
 		ScreenGui:Destroy()
 	end)
 
-	ShopBtn.MouseButton1Click:Connect(function()
+	ToggleBtn.MouseButton1Click:Connect(function()
+		InstantWinsFeatures.enabled = not InstantWinsFeatures.enabled
+		StatusLabel.Text = InstantWinsFeatures.enabled and "فوری بردن فعال ✓" or "فوری بردن لاوە ✗"
+		StatusLabel.TextColor3 = InstantWinsFeatures.enabled and FromRGB(0, 255, 100) or FromRGB(255, 60, 60)
 		Notify({
-			Title = "Solid Carnival",
-			Description = "دەچە بۆ بڕینی کلید...",
-			Duration = 3,
-			Color = Theme.Accent
-		})
-		game:GetService("GuiService"):OpenBrowserWindow(Config.Shop)
-	end)
-
-	SubmitBtn.MouseButton1Click:Connect(function()
-		local key = KeyInput.Text
-		if key == "" then
-			Notify({
-				Title = "هەڵە",
-				Description = "تکایە کلیدی خۆت بنیشتێنە!",
-				Duration = 3,
-				Color = FromRGB(255, 60, 60)
-			})
-			return
-		end
-		
-		-- تێست کردنی کلید / Key Testing
-		Notify({
-			Title = "تێست",
-			Description = "کلید تێست دەکرێت...",
+			Title = "Status",
+			Description = InstantWinsFeatures.enabled and "فوری بردن فعال شد" or "فوری بردن لاوە کرا",
 			Duration = 2,
 			Color = Theme.Accent
 		})
+	end)
 
-		-- ئێرە ئیتریتم لە API کالدا بۆ تێست کردنی کلید
-		-- Here you would normally call your API to verify the key
-		loadstring(game:HttpGet(LoaderUrl))()
+	ActivateBtn.MouseButton1Click:Connect(function()
+		Notify({
+			Title = "InstantWins",
+			Description = "فوری بردن دەستپێکرد... 🚀",
+			Duration = 2,
+			Color = Theme.Accent
+		})
+		
+		-- Load InstantWins functionality
+		if InstantWinsFeatures.enabled then
+			loadstring(game:HttpGet(LoaderUrl))()
+		end
 	end)
 
 	-- Animation / ئامێزی
@@ -822,7 +819,7 @@ do
 		Tween(Main, size_info, { Size = UDim2New(0, panel_w, 0, btn_y + btn_h + pad) })
 		Tween(MainStroke, fade_info, { Transparency = 0.5 })
 
-		for _, item in fade_items do
+		for _, item in pairs(fade_items) do
 			if item.Kind == "bg" then
 				Tween(item.Inst, fade_info, { BackgroundTransparency = 0 })
 			elseif item.Kind == "stroke" then
