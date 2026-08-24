@@ -4,6 +4,16 @@ local KeyLink = "https://linkvertise.com/access/1258318/QZy93Rm5oHBF"
 local LogoID = "rbxassetid://10734975692"
 local Speed = 500 -- سپید: 1 هەتا 1000 (1 = بچووک، 1000 = زۆر خێرا)
 
+-- ئیپلیکێشن ده‌توونە
+local Features = {
+	AutoFarm = false,
+	AutoCollect = false,
+	AutoSell = false,
+	NoClip = false,
+	InfiniteJump = false,
+	SpeedHack = false
+}
+
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "VexoriqHub_PremiumUI"
 ScreenGui.Parent = game:GetService("CoreGui")
@@ -128,8 +138,8 @@ StatusLabel.TextSize = 11
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.Size = UDim2.new(0, 560, 0, 330)
-MainFrame.Position = UDim2.new(0.5, -280, 0.5, -165)
+MainFrame.Size = UDim2.new(0, 560, 0, 430)
+MainFrame.Position = UDim2.new(0.5, -280, 0.5, -215)
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 16, 21)
 MainFrame.BorderSizePixel = 0
 MainFrame.Active = true
@@ -211,7 +221,7 @@ TopLine.BorderSizePixel = 0
 local SpeedLabel = Instance.new("TextLabel")
 SpeedLabel.Parent = MainFrame
 SpeedLabel.Size = UDim2.new(0, 250, 0, 30)
-SpeedLabel.Position = UDim2.new(0.2, 0, 0.3, 0)
+SpeedLabel.Position = UDim2.new(0.2, 0, 0.12, 0)
 SpeedLabel.BackgroundTransparency = 1
 SpeedLabel.Text = "سپید: " .. Speed .. " / 1000"
 SpeedLabel.TextColor3 = Color3.fromRGB(0, 170, 255)
@@ -222,7 +232,7 @@ SpeedLabel.TextSize = 14
 local SpeedSlider = Instance.new("Frame")
 SpeedSlider.Parent = MainFrame
 SpeedSlider.Size = UDim2.new(0, 200, 0, 8)
-SpeedSlider.Position = UDim2.new(0.2, 0, 0.42, 0)
+SpeedSlider.Position = UDim2.new(0.2, 0, 0.2, 0)
 SpeedSlider.BackgroundColor3 = Color3.fromRGB(30, 32, 42)
 SpeedSlider.BorderSizePixel = 0
 
@@ -251,6 +261,72 @@ SliderFill.BorderSizePixel = 0
 local FillCorner = Instance.new("UICorner")
 FillCorner.CornerRadius = UDim.new(0, 4)
 FillCorner.Parent = SliderFill
+
+-- فیچەرەکان (Features) - ON/OFF بە ژمارە
+local function createFeatureToggle(parent, name, xPosition, yPosition)
+	local toggleFrame = Instance.new("Frame")
+	toggleFrame.Parent = parent
+	toggleFrame.Size = UDim2.new(0, 180, 0, 35)
+	toggleFrame.Position = UDim2.new(xPosition, 0, yPosition, 0)
+	toggleFrame.BackgroundTransparency = 1
+	toggleFrame.BorderSizePixel = 0
+
+	local featureLabel = Instance.new("TextLabel")
+	featureLabel.Parent = toggleFrame
+	featureLabel.Size = UDim2.new(0, 120, 1, 0)
+	featureLabel.Position = UDim2.new(0, 0, 0, 0)
+	featureLabel.BackgroundTransparency = 1
+	featureLabel.Text = name
+	featureLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+	featureLabel.Font = Enum.Font.Gotham
+	featureLabel.TextSize = 12
+	featureLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+	local toggleBtn = Instance.new("TextButton")
+	toggleBtn.Parent = toggleFrame
+	toggleBtn.Size = UDim2.new(0, 50, 0, 25)
+	toggleBtn.Position = UDim2.new(1, -50, 0.5, -12)
+	toggleBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+	toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+	toggleBtn.Font = Enum.Font.GothamBold
+	toggleBtn.TextSize = 12
+	toggleBtn.Text = "OFF"
+
+	local btnCorner = Instance.new("UICorner")
+	btnCorner.CornerRadius = UDim.new(0, 6)
+	btnCorner.Parent = toggleBtn
+
+	local btnStroke = Instance.new("UIStroke")
+	btnStroke.Color = Color3.fromRGB(80, 80, 100)
+	btnStroke.Thickness = 1
+	btnStroke.Parent = toggleBtn
+
+	local isOn = false
+
+	toggleBtn.MouseButton1Click:Connect(function()
+		isOn = not isOn
+		if isOn then
+			toggleBtn.Text = "ON"
+			toggleBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+			btnStroke.Color = Color3.fromRGB(0, 200, 255)
+		else
+			toggleBtn.Text = "OFF"
+			toggleBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+			btnStroke.Color = Color3.fromRGB(80, 80, 100)
+		end
+		Features[name] = isOn
+	end)
+
+	return toggleBtn
+end
+
+-- فیچەرەکان بیهێڵ
+createFeatureToggle(MainFrame, "AutoFarm", 0.25, 0.33)
+createFeatureToggle(MainFrame, "AutoCollect", 0.25, 0.44)
+createFeatureToggle(MainFrame, "AutoSell", 0.25, 0.55)
+createFeatureToggle(MainFrame, "NoClip", 0.25, 0.66)
+createFeatureToggle(MainFrame, "InfiniteJump", 0.25, 0.77)
+createFeatureToggle(MainFrame, "SpeedHack", 0.25, 0.88)
 
 -- Functions
 GetKeyBtn.MouseButton1Click:Connect(function()
