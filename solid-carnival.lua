@@ -1,10 +1,10 @@
--- Novax Hub - Ultimate Premium UI (Solix Style)
+-- Vexoriq Hub - Ultimate Premium UI (Solix Style)
 local CorrectKey = "mmjx901"
 local KeyLink = "https://pastebin.com/raw/z1tfb6pe"
 local LogoID = "rbxassetid://10734975692"
 
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "NovaxHub_PremiumUI"
+ScreenGui.Name = "VexoriqHub_PremiumUI"
 ScreenGui.Parent = game:GetService("CoreGui")
 ScreenGui.ResetOnSpawn = false
 
@@ -62,7 +62,7 @@ KeyTitle.Parent = KeyWindow
 KeyTitle.Size = UDim2.new(1, -50, 0, 45)
 KeyTitle.Position = UDim2.new(0, 45, 0, 0)
 KeyTitle.BackgroundTransparency = 1
-KeyTitle.Text = "Novax Hub • Key Verification"
+KeyTitle.Text = "Vexoriq Hub • Key Verification"
 KeyTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 KeyTitle.Font = Enum.Font.GothamBold
 KeyTitle.TextSize = 13
@@ -167,7 +167,7 @@ TitleLabel.Parent = TopBar
 TitleLabel.Size = UDim2.new(1, -90, 1, 0)
 TitleLabel.Position = UDim2.new(0, 44, 0, 0)
 TitleLabel.BackgroundTransparency = 1
-TitleLabel.Text = "Novax Hub • Steal an Egg"
+TitleLabel.Text = "Vexoriq Hub • Steal an Egg"
 TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TitleLabel.TextSize = 13
 TitleLabel.Font = Enum.Font.GothamBold
